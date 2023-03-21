@@ -26,7 +26,8 @@ public class CrimeActivity extends FragmentActivity {
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
         if (fragment == null) {
-            fragment = new CrimeFragment();
+            UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+            fragment = CrimeFragment.newInstance(crimeId);
             fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
 
