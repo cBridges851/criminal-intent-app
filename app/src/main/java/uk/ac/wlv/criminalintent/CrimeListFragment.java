@@ -61,7 +61,7 @@ public class CrimeListFragment extends Fragment {
 
             itemView.setOnClickListener(l -> {
                 Toast.makeText(itemView.getContext(), "potato!", Toast.LENGTH_SHORT).show();
-                Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+                Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
                 startActivity(intent);
             });
         }
