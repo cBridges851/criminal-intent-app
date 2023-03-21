@@ -1,5 +1,6 @@
 package uk.ac.wlv.criminalintent;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -45,9 +47,12 @@ public class CrimeListFragment extends Fragment {
             mTitleTextView = itemView.findViewById(R.id.list_item_crime_title_text_view);
             mDateTextView = itemView.findViewById(R.id.list_item_crime_date_text_view);
             mSolvedCheckbox = itemView.findViewById(R.id.list_item_crime_solved_check_box);
+
+            itemView.setOnClickListener(l -> {
+                Toast.makeText(itemView.getContext(), "potato!", Toast.LENGTH_SHORT).show();
+            });
         }
 
-        // only called once on landscape
         public void bindCrime(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
@@ -67,10 +72,12 @@ public class CrimeListFragment extends Fragment {
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.list_item_crime, parent, false);
+//            view.setOnClickListener(viewHolder -> {
+//                Toast.makeText(viewHolder.getContext(), "meep", Toast.LENGTH_SHORT).show();
+//            });
             return new CrimeHolder(view);
         }
 
-        // only called once on landscape
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime crime = mCrimes.get(position);
