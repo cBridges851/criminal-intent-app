@@ -1,5 +1,6 @@
 package uk.ac.wlv.criminalintent;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Layout;
@@ -36,7 +37,7 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView.setAdapter(mAdapter);
     }
 
-    private static class CrimeHolder extends RecyclerView.ViewHolder {
+    private class CrimeHolder extends RecyclerView.ViewHolder {
         public TextView mTitleTextView;
         public TextView mDateTextView;
         public CheckBox mSolvedCheckbox;
@@ -50,6 +51,8 @@ public class CrimeListFragment extends Fragment {
 
             itemView.setOnClickListener(l -> {
                 Toast.makeText(itemView.getContext(), "potato!", Toast.LENGTH_SHORT).show();
+                Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+                startActivity(intent);
             });
         }
 
