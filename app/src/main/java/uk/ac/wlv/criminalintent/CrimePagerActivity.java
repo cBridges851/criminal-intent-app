@@ -44,6 +44,13 @@ public class CrimePagerActivity extends androidx.fragment.app.FragmentActivity {
             }
         });
 
+        for (int i = 0; i < mCrimes.size(); i++) {
+            if (mCrimes.get(i).getId().equals(crimeId)) {
+                mViewPager.setCurrentItem(i);
+                break;
+            }
+        }
+
         Crime currentCrime = CrimeLab.get(this).getCrime(crimeId);
         mViewPager.setCurrentItem(mCrimes.indexOf(currentCrime));
     }
