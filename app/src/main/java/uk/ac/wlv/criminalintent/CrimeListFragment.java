@@ -93,6 +93,12 @@ public class CrimeListFragment extends Fragment {
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
                 startActivity(intent);
             });
+            
+            mSolvedCheckbox.setOnCheckedChangeListener((view, isChecked) -> {
+                Toast.makeText(itemView.getContext(), "Checked", Toast.LENGTH_SHORT).show();
+                mCrime.setSolved(isChecked);
+                CrimeLab.get(getActivity()).updateCrime(mCrime);
+            });
         }
 
         public void bindCrime(Crime crime) {
