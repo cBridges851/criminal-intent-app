@@ -10,6 +10,10 @@ import uk.ac.wlv.criminalintent.database.CrimeBaseHelper;
 import uk.ac.wlv.criminalintent.database.CrimeCursorWrapper;
 import uk.ac.wlv.criminalintent.database.CrimeDbSchema;
 
+/**
+ * This is basically like a CRUD class - you create, read, and update crimes (probably will
+ * delete here shortly too).
+ */
 public class CrimeLab {
     private static CrimeLab sCrimeLab;
     private List<Crime> mCrimes;

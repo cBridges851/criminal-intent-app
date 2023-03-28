@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+/**
+ * This is the screen which has a container for a fragment that contains a list of crimes
+ */
 // Used to extend FragmentActivity, but this can't host toolbars
 public class CrimeListActivity extends AppCompatActivity {
     @Override

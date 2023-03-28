@@ -10,6 +10,9 @@ import android.os.Bundle;
 
 import java.util.UUID;
 
+/**
+ * Unused activity
+ */
 public class CrimeActivity extends FragmentActivity {
     public static final String EXTRA_CRIME_ID = "uk.ac.wlv.criminalintent.crime_id";
     public static Intent newIntent(Context packageContext, UUID crimeId) {

@@ -3,6 +3,9 @@ package uk.ac.wlv.criminalintent;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * This is the data model that represents a crime
+ */
 public class Crime {
     private UUID mId;
     private String mTitle;

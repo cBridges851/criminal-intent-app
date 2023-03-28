@@ -32,9 +32,11 @@ public class CrimePagerActivity extends androidx.fragment.app.FragmentActivity {
         mCrimes = CrimeLab.get(this).getCrimes();
         FragmentManager fragmentManager= getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+            //
             @Override
             public Fragment getItem(int position) {
                 Crime crime = mCrimes.get(position);
+                UUID id = crime.getId();
                 return CrimeFragment.newInstance(crime.getId());
             }
 

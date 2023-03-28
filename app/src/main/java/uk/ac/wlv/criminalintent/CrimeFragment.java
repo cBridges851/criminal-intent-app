@@ -23,6 +23,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * A component that lets you input the title and details about a crime
+ */
 public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
@@ -42,6 +45,7 @@ public class CrimeFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // it's always 0 here for some reason
         super.onCreate(savedInstanceState);
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
