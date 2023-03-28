@@ -31,4 +31,13 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/crime_solved_label"/>
+
+    <Button
+        android:id="@+id/crime_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:background="@color/design_default_color_error"
+        android:text="Delete"
+        android:textColor="@color/white" />
 </LinearLayout>

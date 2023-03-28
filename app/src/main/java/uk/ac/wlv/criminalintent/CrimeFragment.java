@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -33,6 +35,7 @@ public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private EditText mTitleField;
     Button mDateButton;
+    Button mDeleteButton;
     CheckBox mSolvedCheckBox;
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -87,6 +90,12 @@ public class CrimeFragment extends Fragment {
             DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
             dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
             dialog.show(manager, DIALOG_DATE);
+        });
+
+        mDeleteButton = view.findViewById(R.id.crime_delete);
+        mDeleteButton.setOnClickListener(deleteButtonView -> {
+            CrimeLab.get(getActivity()).deleteCrime(mCrime);
+            requireActivity().finish();
         });
 
         mSolvedCheckBox = view.findViewById(R.id.crime_solved);
