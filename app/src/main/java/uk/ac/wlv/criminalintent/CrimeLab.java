@@ -62,7 +62,8 @@ public class CrimeLab {
                 return null;
             }
             cursor.moveToFirst();
-            return cursor.getCrime();
+            Crime crime = cursor.getCrime();
+            return crime;
         } finally {
             cursor.close();
         }
