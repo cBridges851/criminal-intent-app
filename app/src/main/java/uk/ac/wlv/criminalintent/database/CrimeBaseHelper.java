@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class CrimeBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 1;
+    // Increment when change structure of database, e.g. adding a new field
+    private static final int VERSION = 2;
     private static final String DATABASE_NAME = "crimeBase.db";
 
     public CrimeBaseHelper(Context context) {
@@ -19,7 +20,8 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
                 CrimeDbSchema.CrimeTable.Cols.UUID + ", " +
                 CrimeDbSchema.CrimeTable.Cols.TITLE + ", " +
                 CrimeDbSchema.CrimeTable.Cols.DATE + ", " +
-                CrimeDbSchema.CrimeTable.Cols.SOLVED +
+                CrimeDbSchema.CrimeTable.Cols.SOLVED + ", " +
+                CrimeDbSchema.CrimeTable.Cols.SUSPECT +
                 ")"
         );
     }
