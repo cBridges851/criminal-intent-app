@@ -2,6 +2,8 @@ package uk.ac.wlv.criminalintent;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -41,6 +43,7 @@ public class CrimeFragment extends Fragment {
     Button mDateButton;
     Button mDeleteButton;
     CheckBox mSolvedCheckBox;
+    private Button mPhoneCallButton;
     private Button mSuspectButton;
     private Button mReportButton;
 
@@ -129,6 +132,13 @@ public class CrimeFragment extends Fragment {
             mSuspectButton.setText(mCrime.getSuspect());
         }
 
+        mPhoneCallButton = view.findViewById(R.id.crime_report_phone_call);
+        mPhoneCallButton.setOnClickListener(phoneCallView -> {
+            Uri phoneNumber = Uri.parse(String.valueOf("tel:" + getString(R.string.phone_number)));
+            Intent intent = new Intent(Intent.ACTION_DIAL, phoneNumber);
+            startActivity(intent);
+        });
+
         return view;
     }
 
@@ -142,6 +152,31 @@ public class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             mDateButton.setText(mCrime.getDate().toString());
+        } else if (requestCode == REQUEST_CONTACT) {
+            Uri contactUri = data.getData();
+
+            // get all display names of the contacts in the returned data
+            String[] queryFields = new String[] {
+                    ContactsContract.Contacts.DISPLAY_NAME
+            };
+
+            // querying contacts to get to the suspect that matches
+            Cursor cursor = getActivity()
+                    .getContentResolver()
+                    .query(contactUri, queryFields, null, null, null);
+
+            try {
+                if (cursor.getCount() == 0) {
+                    return;
+                }
+
+                cursor.moveToFirst();
+                String suspect = cursor.getString(0);
+                mCrime.setSuspect(suspect);
+                mSuspectButton.setText(suspect);
+            } finally {
+                cursor.close();
+            }
         }
     }
 
