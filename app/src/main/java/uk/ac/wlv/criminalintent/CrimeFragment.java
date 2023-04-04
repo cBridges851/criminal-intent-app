@@ -1,9 +1,12 @@
 package uk.ac.wlv.criminalintent;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -13,21 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -38,6 +37,8 @@ public class CrimeFragment extends Fragment {
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 1;
+    private static final int REQUEST_CALL_CONTACT = 2;
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 3;
     private Crime mCrime;
     private EditText mTitleField;
     Button mDateButton;
@@ -134,9 +135,21 @@ public class CrimeFragment extends Fragment {
 
         mPhoneCallButton = view.findViewById(R.id.crime_report_phone_call);
         mPhoneCallButton.setOnClickListener(phoneCallView -> {
-            Uri phoneNumber = Uri.parse(String.valueOf("tel:" + getString(R.string.phone_number)));
-            Intent intent = new Intent(Intent.ACTION_DIAL, phoneNumber);
-            startActivity(intent);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                return;
+            }
+
+            if (getActivity().getApplicationContext().checkSelfPermission(Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        getActivity(),
+                        new String[] {Manifest.permission.READ_CONTACTS},
+                        PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+
+            if (getActivity().getApplicationContext().checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                startActivityForResult(pickContact, REQUEST_CALL_CONTACT);
+            }
         });
 
         return view;
@@ -176,6 +189,42 @@ public class CrimeFragment extends Fragment {
                 mSuspectButton.setText(suspect);
             } finally {
                 cursor.close();
+            }
+        } else if (requestCode == REQUEST_CALL_CONTACT) {
+            Uri contactUri = data.getData();
+
+            Cursor cursor = getActivity().getContentResolver().query(
+                    contactUri,
+                    null,
+                    null,
+                    null,
+                    null);
+
+
+            if (cursor.moveToFirst()) {
+                String id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                String hasPhone =
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+                if (hasPhone.equalsIgnoreCase("1")) {
+                    Cursor phones = getActivity()
+                            .getContentResolver()
+                            .query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                    null,
+                                    null
+                            );
+
+                    phones.moveToFirst();
+                    String contactNumber = phones.getString(
+                            phones.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER
+                            ));
+                    Uri phoneNumberUri = Uri.parse("tel:" + contactNumber);
+                    Intent intent = new Intent(Intent.ACTION_DIAL, phoneNumberUri);
+                    startActivity(intent);
+                }
             }
         }
     }
