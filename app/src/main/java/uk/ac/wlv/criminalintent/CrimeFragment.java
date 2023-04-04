@@ -3,6 +3,7 @@ package uk.ac.wlv.criminalintent;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -34,11 +35,13 @@ public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_CONTACT = 1;
     private Crime mCrime;
     private EditText mTitleField;
     Button mDateButton;
     Button mDeleteButton;
     CheckBox mSolvedCheckBox;
+    private Button mSuspectButton;
     private Button mReportButton;
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -114,6 +117,18 @@ public class CrimeFragment extends Fragment {
             intent = Intent.createChooser(intent, getString(R.string.send_report));
             startActivity(intent);
         });
+
+        final Intent pickContact = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+        mSuspectButton = view.findViewById(R.id.crime_suspect);
+        mSuspectButton.setOnClickListener(suspectButtonView -> {
+            startActivityForResult(pickContact, REQUEST_CONTACT);
+        });
+
+        if (mCrime.getSuspect() != null) {
+            mSuspectButton.setText(mCrime.getSuspect());
+        }
+
         return view;
     }
 
