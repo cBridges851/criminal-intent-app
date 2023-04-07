@@ -189,6 +189,15 @@ public class CrimeFragment extends Fragment {
         });
 
         mPhotoView = view.findViewById(R.id.crime_photo);
+        mPhotoView.setOnClickListener(photoView -> {
+            Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "uk.ac.wlv.criminalintent.fileprovider", mPhotoFile);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "image/*");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
+        });
         updatePhotoView();
 
         return view;
