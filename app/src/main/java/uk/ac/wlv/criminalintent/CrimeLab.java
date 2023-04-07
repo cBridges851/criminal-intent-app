@@ -3,6 +3,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +22,11 @@ public class CrimeLab {
     private List<Crime> mCrimes;
     private Context mContext;
     private SQLiteDatabase mDatabase;
+
+    public File getPhotoFile(Crime crime) {
+        File filesDirectory = mContext.getFilesDir();
+        return new File(filesDirectory, crime.getPhotoFilename());
+    }
 
     public static CrimeLab get(Context context) {
         if (sCrimeLab == null) {
