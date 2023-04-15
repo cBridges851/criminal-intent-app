@@ -46,6 +46,10 @@ public class CrimeListFragment extends Fragment {
             startActivity(intent);
             return true;
         }
+
+        if (item.getItemId() == R.id.option1) {
+            Toast.makeText(getActivity(), "Option 1!", Toast.LENGTH_SHORT).show();
+        }
         return super.onOptionsItemSelected(item);
     }
 
