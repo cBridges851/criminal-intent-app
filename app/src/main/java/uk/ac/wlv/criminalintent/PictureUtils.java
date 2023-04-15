@@ -7,7 +7,17 @@ import android.graphics.Point;
 import android.os.Build;
 
 public class PictureUtils {
-    public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight) {
+    public static Bitmap getScaledBitmap(String path, Activity activity) {
+        Point size = new Point();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            activity.getWindowManager().getDefaultDisplay().getSize(size);
+            return getScaledBitmap(path, size.x, size.y);
+        }
+
+        return null;
+    }
+
+    private static Bitmap getScaledBitmap(String path, int destWidth, int destHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
@@ -24,15 +34,5 @@ public class PictureUtils {
         options = new BitmapFactory.Options();
         options.inSampleSize = inSampleSize;
         return BitmapFactory.decodeFile(path, options);
-    }
-
-    public static Bitmap getScaledBitmap(String path, Activity activity) {
-        Point size = new Point();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            activity.getWindowManager().getDefaultDisplay().getSize(size);
-            return getScaledBitmap(path, size.x, size.y);
-        }
-
-        return null;
     }
 }
