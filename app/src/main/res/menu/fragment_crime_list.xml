@@ -6,6 +6,12 @@
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/new_crime"
         app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/menu_item_search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:title="Search" />
     <item android:id="@+id/option1"
         android:title="Option 1" />
     <item android:id="@+id/option2"

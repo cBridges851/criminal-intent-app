@@ -4,26 +4,31 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private List<Crime> crimes;
 
 
     /**
@@ -50,12 +55,37 @@ public class CrimeListFragment extends Fragment {
         if (item.getItemId() == R.id.option1) {
             Toast.makeText(getActivity(), "Option 1!", Toast.LENGTH_SHORT).show();
         }
+
+        if (item.getItemId() == R.id.menu_item_search) {
+            SearchView searchView = (SearchView) item.getActionView();
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    List<Crime> results = new ArrayList<Crime>();
+                    for (Crime crime : crimes) {
+                        if (crime.getTitle().contains(newText)) {
+                            results.add(crime);
+                        }
+                    }
+
+                    updateUI(results);
+                    return false;
+                }
+            });
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        crimes = CrimeLab.get(getActivity()).getCrimes();
         setHasOptionsMenu(true);
     }
 
@@ -64,19 +94,19 @@ public class CrimeListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        updateUI();
+        crimes = CrimeLab.get(getActivity()).getCrimes();
+        updateUI(crimes);
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+        crimes = CrimeLab.get(getActivity()).getCrimes();
+        updateUI(crimes);
     }
 
-    private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
-        List<Crime> crimes = crimeLab.getCrimes();
+    private void updateUI(List<Crime> crimes) {
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
