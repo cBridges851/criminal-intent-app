@@ -126,16 +126,7 @@ public class CrimeFragment extends Fragment {
 
         mLinkedInButton = view.findViewById(R.id.linkedin);
         mLinkedInButton.setOnClickListener(linkedinButtonView -> {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setPackage("com.linkedin.android");
-            shareIntent.setType("text/*");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
-
-            try {
-                startActivity(shareIntent);
-            } catch (Exception exception) {
-                Toast.makeText(getActivity(), "Yo you don't have LinkedIn installed", Toast.LENGTH_SHORT).show();
-            }
+            new Sharer().shareToLinkedIn(this, getCrimeReport());
         });
 
         mSolvedCheckBox = view.findViewById(R.id.crime_solved);
