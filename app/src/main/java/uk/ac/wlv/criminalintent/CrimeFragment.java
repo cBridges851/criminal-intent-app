@@ -2,6 +2,7 @@ package uk.ac.wlv.criminalintent;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -22,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -51,6 +53,7 @@ public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private EditText mTitleField;
     Button mDateButton;
+    Button mLinkedInButton;
     Button mDeleteButton;
     CheckBox mSolvedCheckBox;
     private Button mPhoneCallButton;
@@ -119,6 +122,20 @@ public class CrimeFragment extends Fragment {
         mDeleteButton.setOnClickListener(deleteButtonView -> {
             CrimeLab.get(getActivity()).deleteCrime(mCrime);
             requireActivity().finish();
+        });
+
+        mLinkedInButton = view.findViewById(R.id.linkedin);
+        mLinkedInButton.setOnClickListener(linkedinButtonView -> {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setPackage("com.linkedin.android");
+            shareIntent.setType("text/*");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
+
+            try {
+                startActivity(shareIntent);
+            } catch (Exception exception) {
+                Toast.makeText(getActivity(), "Yo you don't have LinkedIn installed", Toast.LENGTH_SHORT).show();
+            }
         });
 
         mSolvedCheckBox = view.findViewById(R.id.crime_solved);
