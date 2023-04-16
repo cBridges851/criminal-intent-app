@@ -62,18 +62,14 @@ public class CrimeListFragment extends Fragment {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
+                    List<Crime> results = new SearchHelper().getResults(query, crimes);
+                    updateUI(results);
                     return false;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    List<Crime> results = new ArrayList<Crime>();
-                    for (Crime crime : crimes) {
-                        if (crime.getTitle().contains(newText)) {
-                            results.add(crime);
-                        }
-                    }
-
+                    List<Crime> results = new SearchHelper().getResults(newText, crimes);
                     updateUI(results);
                     return false;
                 }
